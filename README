@@ -1,1 +1,3 @@
-
+To set up RabbitMQ:
+	You need to install Erlang: https://www.erlang.org/downloads
+	Then you install RabbitMQServer: https://www.rabbitmq.com/download.html
