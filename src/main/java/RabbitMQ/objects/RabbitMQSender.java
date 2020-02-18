@@ -1,4 +1,4 @@
-package objects;
+package RabbitMQ.objects;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

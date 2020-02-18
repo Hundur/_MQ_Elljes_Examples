@@ -1,5 +1,7 @@
-import objects.RabbitMQReciever;
-import objects.RabbitMQSender;
+package RabbitMQ;
+
+import RabbitMQ.objects.RabbitMQReciever;
+import RabbitMQ.objects.RabbitMQSender;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
