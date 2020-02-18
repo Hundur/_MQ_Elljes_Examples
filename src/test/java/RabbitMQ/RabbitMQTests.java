@@ -1,6 +1,6 @@
 package RabbitMQ;
 
-import RabbitMQ.objects.RabbitMQReciever;
+import RabbitMQ.objects.RabbitMQReceiver;
 import RabbitMQ.objects.RabbitMQSender;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,14 +14,14 @@ import java.util.concurrent.TimeoutException;
 public class RabbitMQTests {
 
     private RabbitMQSender rabbitMQSender;
-    private RabbitMQReciever rabbitMQReciever;
+    private RabbitMQReceiver rabbitMQReceiver;
 
     @BeforeEach
     public void beforeEach() {
         rabbitMQSender = new RabbitMQSender("My_First_Queue");
-        rabbitMQReciever = new RabbitMQReciever("My_First_Queue");
+        rabbitMQReceiver = new RabbitMQReceiver("My_First_Queue");
         try {
-            rabbitMQReciever.startRecieving();
+            rabbitMQReceiver.startReceiving();
         } catch (IOException | TimeoutException e) {
             System.out.println(e.getMessage());
         }
@@ -29,10 +29,8 @@ public class RabbitMQTests {
 
     @AfterEach
     public void afterEach() {
-
-
         try {
-            rabbitMQReciever.stopRecieving();
+            rabbitMQReceiver.stopReceiving();
         } catch (IOException | TimeoutException e) {
             System.out.println(e.getMessage());
         }
@@ -42,15 +40,15 @@ public class RabbitMQTests {
     public void sendOneMessage() {
         try {
             String originMessage = "This is a test";
-            String recievedMessage;
+            String receivedMessage;
 
             rabbitMQSender.sendMessage(originMessage);
 
             Thread.sleep(100);
 
-            recievedMessage = rabbitMQReciever.getMessage();
+            receivedMessage = rabbitMQReceiver.getMessage();
 
-            assertEquals(originMessage, recievedMessage);
+            assertEquals(originMessage, receivedMessage);
 
         } catch (IOException | TimeoutException | InterruptedException e) {
             System.out.println(e.getMessage());
@@ -64,7 +62,7 @@ public class RabbitMQTests {
             String originMessage1 = "This is a test";
             String originMessage2 = "This is also test";
             String originMessage3 = "This is the third test";
-            String recievedMessage;
+            String receivedMessage;
 
             rabbitMQSender.sendMessage(originMessage1);
             rabbitMQSender.sendMessage(originMessage2);
@@ -72,18 +70,27 @@ public class RabbitMQTests {
 
             Thread.sleep(100);
 
-            recievedMessage = rabbitMQReciever.getMessage();
-            assertEquals(originMessage1, recievedMessage);
+            receivedMessage = rabbitMQReceiver.getMessage();
+            assertEquals(originMessage1, receivedMessage);
 
-            recievedMessage = rabbitMQReciever.getMessage();
-            assertEquals(originMessage2, recievedMessage);
+            receivedMessage = rabbitMQReceiver.getMessage();
+            assertEquals(originMessage2, receivedMessage);
 
-            recievedMessage = rabbitMQReciever.getMessage();
-            assertEquals(originMessage3, recievedMessage);
+            receivedMessage = rabbitMQReceiver.getMessage();
+            assertEquals(originMessage3, receivedMessage);
 
         } catch (IOException | TimeoutException | InterruptedException e) {
             System.out.println(e.getMessage());
             fail();
         }
+    }
+
+    @Test
+    public void receiveWhenNoMessages() {
+
+        String receivedMessage;
+        receivedMessage = rabbitMQReceiver.getMessage();
+
+        assertEquals("No messages", receivedMessage);
     }
 }

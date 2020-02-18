@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
-public class RabbitMQReciever {
+public class RabbitMQReceiver {
 
     private String QUEUE_NAME;
     private ConnectionFactory FACTORY;
@@ -19,7 +19,7 @@ public class RabbitMQReciever {
 
     private ArrayList<String> MESSAGES;
 
-    public RabbitMQReciever(String QUEUE_NAME) {
+    public RabbitMQReceiver(String QUEUE_NAME) {
         this.QUEUE_NAME = QUEUE_NAME;
         FACTORY = new ConnectionFactory();
         FACTORY.setHost("localhost");
@@ -27,7 +27,7 @@ public class RabbitMQReciever {
         MESSAGES = new ArrayList<>();
     }
 
-    public void startRecieving() throws IOException, TimeoutException {
+    public void startReceiving() throws IOException, TimeoutException {
 
         CONNECTION = FACTORY.newConnection();
         CHANNEL = CONNECTION.createChannel();
@@ -44,10 +44,13 @@ public class RabbitMQReciever {
     }
 
     public String getMessage() {
-        return MESSAGES.remove(0);
+        if (MESSAGES.size() > 0)
+            return MESSAGES.remove(0);
+        else
+            return "No messages";
     }
 
-    public void stopRecieving() throws IOException, TimeoutException {
+    public void stopReceiving() throws IOException, TimeoutException {
         CHANNEL.basicCancel(CONSUMER_TAG);
         CHANNEL.close();
         CONNECTION.close();
